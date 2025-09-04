@@ -1,14 +1,60 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { X } from 'lucide-react'; // You can use Heroicons, FontAwesome, or Lucide
-
+import { X } from 'lucide-react'; // icons
 import {
   LayoutDashboard,
   Users,
   Boxes,
   UserCircle,
-  ChevronDown
+  ChevronDown,
 } from 'lucide-react';
+
+// Get roles from localStorage (as array of uppercase strings)
+const roles = JSON.parse(localStorage.getItem('roles'))?.map(r => r.toUpperCase()) || [];
+
+// Helper: check if user roles intersect with allowedRoles
+const hasAccess = (allowedRoles = []) => {
+  if (allowedRoles.length === 0) return true; // no restriction
+  return roles.some(role => allowedRoles.includes(role));
+};
+
+// Define sidebar items with allowedRoles added
+const navItems = [
+  {
+    type: 'link',
+    to: '/',
+    label: 'Dashboard',
+    icon: <LayoutDashboard className="w-5 h-5" />,
+    allowedRoles: ['ADMIN', 'EMPLOYEE', 'USER'],
+  },
+  {
+    type: 'dropdown',
+    label: 'Manage',
+    icon: <Boxes className="w-5 h-5" />,
+    allowedRoles: ['ADMIN'], // only admin can see Manage
+    children: [
+      {
+        to: '/users',
+        label: 'Users',
+        icon: <Users className="w-4 h-4" />,
+        allowedRoles: ['ADMIN'],
+      },
+      {
+        to: '/categories',
+        label: 'Products',
+        icon: <Boxes className="w-4 h-4" />,
+        allowedRoles: ['ADMIN', 'EMPLOYEE'],
+      },
+    ],
+  },
+  {
+    type: 'link',
+    to: '/profile',
+    label: 'Profile',
+    icon: <UserCircle className="w-5 h-5" />,
+    allowedRoles: ['ADMIN', 'EMPLOYEE', 'USER'],
+  },
+];
 
 export default function Sidebar({ sidebarOpen, setSidebarOpen }) {
   return (
@@ -21,7 +67,8 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }) {
         onClick={() => setSidebarOpen(false)}
       ></div>
 
-      <div style={{ height: 'inherit' }}
+      <div
+        style={{ height: 'inherit' }}
         className={`fixed inset-y-0 left-0 z-40 w-64 bg-gray-800 text-white transform transition-transform duration-200 lg:translate-x-0 lg:static ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
@@ -33,46 +80,63 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }) {
             <X className="w-5 h-5" />
           </button>
         </div>
-      <div className="p-4 text-xl font-bold flex items-center gap-2">
-        <UserCircle className="w-6 h-6 text-white" />
-        HandyHub
-      </div>
 
-      <nav className="flex flex-col px-4">
-        <Link to="/" className="hover:bg-gray-700 px-3 py-2 rounded flex items-center gap-2">
-          <LayoutDashboard className="w-5 h-5" />
-          Dashboard
-        </Link>
-
-        {/* Group dropdown */}
-        <div className="group">
-          <div className="hover:bg-gray-700 px-3 py-2 rounded cursor-pointer flex justify-between items-center">
-            <div className="flex items-center gap-2">
-              <Boxes className="w-5 h-5" />
-              Manage
-            </div>
-            <ChevronDown className="w-4 h-4 transition-transform group-hover:rotate-180" />
-          </div>
-
-          <div className="hidden group-hover:flex flex-col pl-8 text-sm mt-1">
-            <Link to="/users" className="hover:bg-gray-700 px-3 py-2 rounded flex items-center gap-2">
-              <Users className="w-4 h-4" />
-              Users
-            </Link>
-            <Link to="/products" className="hover:bg-gray-700 px-3 py-2 rounded flex items-center gap-2">
-              <Boxes className="w-4 h-4" />
-              Products
-            </Link>
-          </div>
+        <div className="p-4 text-xl font-bold flex items-center gap-2">
+          <UserCircle className="w-6 h-6 text-white" />
+          HandyHub
         </div>
 
-        <Link to="/profile" className="hover:bg-gray-700 px-3 py-2 rounded flex items-center gap-2">
-          <UserCircle className="w-5 h-5" />
-          Profile
-        </Link>
-      </nav>
-    </div>
+        <nav className="flex flex-col px-4">
+          {navItems.map((item, idx) => {
+            if (!hasAccess(item.allowedRoles)) return null;
+
+            if (item.type === 'link') {
+              return (
+                <Link
+                  key={idx}
+                  to={item.to}
+                  className="hover:bg-gray-700 px-3 py-2 rounded flex items-center gap-2"
+                >
+                  {item.icon}
+                  {item.label}
+                </Link>
+              );
+            } else if (item.type === 'dropdown') {
+              // Filter children by roles too
+              const filteredChildren = item.children.filter(child =>
+                hasAccess(child.allowedRoles)
+              );
+              if (filteredChildren.length === 0) return null;
+
+              return (
+                <div key={idx} className="group">
+                  <div className="hover:bg-gray-700 px-3 py-2 rounded cursor-pointer flex justify-between items-center">
+                    <div className="flex items-center gap-2">
+                      {item.icon}
+                      {item.label}
+                    </div>
+                    <ChevronDown className="w-4 h-4 transition-transform group-hover:rotate-180" />
+                  </div>
+
+                  <div className="hidden group-hover:flex flex-col pl-8 text-sm mt-1">
+                    {filteredChildren.map((child, cidx) => (
+                      <Link
+                        key={cidx}
+                        to={child.to}
+                        className="hover:bg-gray-700 px-3 py-2 rounded flex items-center gap-2"
+                      >
+                        {child.icon}
+                        {child.label}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              );
+            }
+            return null;
+          })}
+        </nav>
+      </div>
     </>
   );
-  
 }

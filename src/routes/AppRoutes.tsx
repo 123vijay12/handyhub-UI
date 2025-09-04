@@ -1,19 +1,31 @@
-// src/routes/AppRoutes.jsx
-import { Routes, Route } from 'react-router-dom';
-import Dashboard from '../pages/Dashboard';
-import CreateUser from '../pages/CreateUser';
-import UserList from '../pages/UserList';
-import EditEmployee from '../pages/EditUser';
-
+import { Routes, Route } from "react-router-dom";
+import Dashboard from "../pages/Dashboard";
+import MainLayout from "../Layout/MainLayout";
+import userRoutes from "./UserRoutes";
+import Login from "../pages/auth/Login";
+import PrivateRoute from "./PrivateRoute"; // import your PrivateRoute
+import NotFoundPage from "../pages/NotFoundPage";
 
 const AppRoutes = () => {
   return (
     <Routes>
-      <Route path="/" element={<Dashboard />} />
-          <Route path="/users" element={<UserList />} />
-          <Route path="/users/create" element={<CreateUser />} />
-          <Route path="/users/edit/:id" element={<EditEmployee />} />
-      {/* Add more routes here */}
+      {/* Public route */}
+      <Route path="/login" element={<Login />} />
+
+      {/* Protected routes */}
+      <Route
+        path="/"
+        element={
+          <PrivateRoute>
+            <MainLayout />
+          </PrivateRoute>
+        }
+      >
+        <Route index element={<Dashboard />} />
+        {userRoutes}
+        {/* Add more protected routes here */}
+      </Route>
+       <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );
 };

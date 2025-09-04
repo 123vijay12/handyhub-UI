@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import Sidebar from '../components/Sidebar';
 import Navbar from '../components/Navbar';
+import { Outlet } from 'react-router-dom'; // 👈 Import this
 
-export default function MainLayout({ children }) {
+export default function MainLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
@@ -21,7 +22,7 @@ export default function MainLayout({ children }) {
 
         {/* Scrollable content */}
         <main className="flex-1 overflow-y-auto p-6">
-          {children}
+          <Outlet /> {/* 👈 This renders the nested routes */}
         </main>
       </div>
     </div>
