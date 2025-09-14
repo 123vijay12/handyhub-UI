@@ -5,9 +5,10 @@ import CreateUser from "../pages/user/CreateUser";
 import EditEmployee from "../pages/user/EditUser";
 import SubcategoriesPage from "../pages/SubcategoriesPage";
 import CategoryPage from "../pages/CategoryPage";
+import EmployeeTabs from "../pages/user/EmployeeTabs";
 
 const userRoutes = [
-  <Route key="user-list" path="/users" element={<UserList />} />,
+  <Route key="user-list" path="/users" element={<EmployeeTabs />} />,
   <Route key="create-user" path="/users/create" element={<CreateUser />} />,
   <Route key="edit-user" path="/users/edit/:id" element={<EditEmployee />} />,
   <Route key="category-list" path="/categories" element={<CategoryPage />} />,
