@@ -11,8 +11,8 @@ import {
   createSubcategory,
   updateSubcategory,
   deleteSubcategory,
-} from "../api/subcategoryApi";
-import CustomSnackbar from "../components/util/CustomSnackbar";
+} from "../../api/subcategoryApi";
+import CustomSnackbar from "../../components/util/CustomSnackbar";
 
 const SubcategoriesPage = () => {
   const { categoryId } = useParams();
@@ -146,7 +146,7 @@ const SubcategoriesPage = () => {
                 <Box
                   component="img"
                   src={
-                    sub.image ||
+                    sub.imageUrl ||
                     "https://www.shutterstock.com/image-vector/category-prioritize-work-project-management-260nw-2180299987.jpg"
                   }
                   alt={sub.subcategoryName}

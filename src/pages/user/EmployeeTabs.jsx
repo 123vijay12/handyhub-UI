@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import { User, Briefcase } from "lucide-react"; // ✅ valid icons
 import UserList from "./UserList";
-import WorkerList from "./WorkerList";
+import AddWorkerProfile from "../worker/WorkerList";
 
 const TabPanel = ({ children, value, index }) => {
   return (
@@ -70,7 +70,7 @@ const EmployeeTabs = () => {
           <UserList />
         </TabPanel>
         <TabPanel value={activeTab} index={1}>
-          <WorkerList />
+          <AddWorkerProfile></AddWorkerProfile>
         </TabPanel>
       </Paper>
     </Box>

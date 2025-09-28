@@ -5,8 +5,8 @@ import {
   TextField, CircularProgress, Box
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { fetchCategories, createCategory, updateCategory } from "../api/categoryApi";
-import CustomSnackbar from "../components/util/CustomSnackbar";
+import { fetchCategories, createCategory, updateCategory } from "../../api/categoryApi";
+import CustomSnackbar from "../../components/util/CustomSnackbar";
 
 const CategoryPage = () => {
   const navigate = useNavigate();
@@ -78,93 +78,105 @@ const CategoryPage = () => {
     }
   };
 
-  return (
-  <Box p={3} bgcolor="#f9fafc" minHeight="100vh">
-    <Typography variant="h4" gutterBottom fontWeight="bold">
+return (
+  <Box
+    p={4}
+    bgcolor="#f9fafc"
+    minHeight="100vh"
+    display="flex"
+    flexDirection="column"
+    alignItems="center"
+  >
+    {/* Header */}
+    <Typography variant="h4" fontWeight="bold" gutterBottom align="center">
       Categories
     </Typography>
-    <Button
-      variant="contained"
-      sx={{
-        mb: 3,
-        bgcolor: "#1976d2",
-        "&:hover": { bgcolor: "#125ea2" }
-      }}
-      onClick={handleAddClick}
-    >
-      Add Category
-    </Button>
 
+    {/* Add Category Button */}
+    <Box width="100%" maxWidth={1200} mb={4} display="flex" justifyContent="flex-end">
+      <Button
+        variant="contained"
+        onClick={handleAddClick}
+        sx={{
+          bgcolor: "#1976d2",
+          "&:hover": { bgcolor: "#125ea2" },
+          textTransform: "none",
+          fontWeight: 600
+        }}
+      >
+        Add Category
+      </Button>
+    </Box>
+
+    {/* Loading Spinner */}
     {loading ? (
-      <Box display="flex" justifyContent="center" mt={4}>
+      <Box display="flex" justifyContent="center" mt={6} width="100%">
         <CircularProgress />
       </Box>
     ) : (
-<Grid container spacing={3}>
-  {categories.map((cat) => (
-    <Grid item xs={12} sm={6} md={4} key={cat.id}>
-      <Card
-        sx={{
-          height: "100%",
-          borderRadius: 3,
-          boxShadow: 3,
-          overflow: "hidden",
-          display: "flex",
-          flexDirection: "column",
-          transition: "transform 0.2s ease, box-shadow 0.2s ease",
-          "&:hover": {
-            transform: "translateY(-4px)",
-            boxShadow: 6
-          }
-        }}
-      >
-        {/* Image placeholder */}
-        <Box
-          component="img"
-          src={cat.categoryImage || "https://t4.ftcdn.net/jpg/00/81/38/59/360_F_81385977_wNaDMtgrIj5uU5QEQLcC9UNzkJc57xbu.jpg"}
-          alt={cat.categoryName}
-          sx={{
-            width: "100%",
-            height: 200,
-            objectFit: "cover",
-            backgroundColor: "#f0f0f0"
-          }}
-        />
+      <Grid container spacing={4} justifyContent="center" maxWidth={1200}>
+        {categories.map((cat) => (
+          <Grid item xs={12} sm={6} md={4} key={cat.id}>
+            <Card
+              sx={{
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+                borderRadius: 3,
+                boxShadow: 3,
+                overflow: "hidden",
+                transition: "transform 0.2s ease, box-shadow 0.2s ease",
+                "&:hover": { transform: "translateY(-6px)", boxShadow: 6 }
+              }}
+            >
+              {/* Image */}
+              <Box
+                component="img"
+                src={cat.imageUrl || "https://t4.ftcdn.net/jpg/00/81/38/59/360_F_81385977_wNaDMtgrIj5uU5QEQLc9UNzkJc57xbu.jpg"}
+                alt={cat.categoryName}
+                sx={{
+                  width: "100%",
+                  height: 200,
+                  objectFit: "cover",
+                  backgroundColor: "#e0e0e0"
+                }}
+              />
 
-        {/* Title & Description */}
-        <CardContent sx={{ flexGrow: 1 }}>
-          <Typography variant="h6" fontWeight="bold" gutterBottom>
-            {cat.categoryName}
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            {cat.categoryDescription}
-          </Typography>
-        </CardContent>
+              {/* Content */}
+              <CardContent sx={{ flexGrow: 1 }}>
+                <Typography variant="h6" fontWeight="bold" gutterBottom>
+                  {cat.categoryName}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {cat.categoryDescription}
+                </Typography>
+              </CardContent>
 
-        {/* Action Buttons */}
-        <CardActions sx={{ px: 2, pb: 2, gap: 1 }}>
-          <Button
-            size="small"
-            variant="outlined"
-            color="primary"
-            onClick={() => navigate(`/categories/${cat.categoryId}/subcategories`)}
-          >
-            View Subcategories
-          </Button>
-          <Button
-            size="small"
-            variant="contained"
-            color="secondary"
-            onClick={() => handleEditClick(cat)}
-          >
-            Edit
-          </Button>
-        </CardActions>
-      </Card>
-    </Grid>
-  ))}
-</Grid>
-
+              {/* Actions */}
+              <CardActions sx={{ px: 2, pb: 2, gap: 1 }}>
+                <Button
+                  size="small"
+                  variant="outlined"
+                  color="primary"
+                  onClick={() => navigate(`/categories/${cat.categoryId}/subcategories`)}
+                  sx={{ textTransform: "none" }}
+                >
+                  View Subcategories
+                </Button>
+                <Button
+                  size="small"
+                  variant="contained"
+                  color="secondary"
+                  onClick={() => handleEditClick(cat)}
+                  sx={{ textTransform: "none" }}
+                >
+                  Edit
+                </Button>
+              </CardActions>
+            </Card>
+          </Grid>
+        ))}
+      </Grid>
     )}
 
     {/* Add/Edit Dialog */}
@@ -178,6 +190,7 @@ const CategoryPage = () => {
           value={formData.categoryName}
           onChange={handleChange}
           fullWidth
+          autoFocus
         />
         <TextField
           margin="dense"
@@ -207,6 +220,7 @@ const CategoryPage = () => {
     />
   </Box>
 );
+
 };
 
 export default CategoryPage;

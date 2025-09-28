@@ -41,9 +41,30 @@ const navItems = [
       },
       {
         to: '/categories',
-        label: 'Products',
+        label: 'Service',
         icon: <Boxes className="w-4 h-4" />,
         allowedRoles: ['ADMIN', 'EMPLOYEE'],
+      },
+    ],
+  },
+  // ---------- New Nav Item for Users ----------
+  {
+    type: 'dropdown', // dropdown makes sense since you will select category first
+    label: 'Find Workers', // clear name for users
+    icon: <Users className="w-5 h-5" />,
+    allowedRoles: ['ADMIN','USER'], // normal users
+    children: [
+      {
+        to: '/browse/categories', // first select category
+        label: 'Categories',
+        icon: <Boxes className="w-4 h-4" />,
+        allowedRoles: ['ADMIN','USER'],
+      },
+      {
+        to: '/browse/workers', // then show list of workers
+        label: 'Workers',
+        icon: <UserCircle className="w-4 h-4" />,
+        allowedRoles: ['ADMIN','USER'],
       },
     ],
   },
@@ -53,8 +74,9 @@ const navItems = [
     label: 'Profile',
     icon: <UserCircle className="w-5 h-5" />,
     allowedRoles: ['ADMIN', 'EMPLOYEE', 'USER'],
-  },
+  }
 ];
+
 
 export default function Sidebar({ sidebarOpen, setSidebarOpen }) {
   return (
