@@ -53,8 +53,8 @@ const DynamicTable = ({
                   key={col.field}
                   sx={{
                     fontWeight: "bold",
-                    backgroundColor: "#2b1818ff",
-                    color: "wheat",
+                    backgroundColor: "#1f2937",
+                    color: "#fff",
                     width: col.width,
                     textAlign: "center",
                   }}
@@ -67,8 +67,8 @@ const DynamicTable = ({
                   align="center"
                   sx={{
                     fontWeight: "bold",
-                    backgroundColor: "#2b1818ff",
-                    color: "wheat",
+                    backgroundColor: "#1f2937",
+                    color: "#fff",
                     minWidth: "120px",
                   }}
                 >

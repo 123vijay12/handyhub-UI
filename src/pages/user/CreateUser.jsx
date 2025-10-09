@@ -1,5 +1,4 @@
-// src/pages/Employees/AddEmployee.jsx
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import DynamicForm from "../../components/util/DynamicForm";
 import { fetchRoles } from "../../api/roleApi";
 import { createUser } from "../../api/userApi";
@@ -8,19 +7,16 @@ import CustomSnackbar from "../../components/util/CustomSnackbar";
 const AddEmployee = () => {
   const [roles, setRoles] = useState([]);
 
-  // Snackbar state
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMsg, setSnackbarMsg] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
 
-  // Snackbar helper
   const showSnackbar = (message, severity = "success") => {
     setSnackbarMsg(message);
     setSnackbarSeverity(severity);
     setSnackbarOpen(true);
   };
 
-  // Fetch roles
   useEffect(() => {
     const loadRoles = async () => {
       try {
@@ -34,8 +30,8 @@ const AddEmployee = () => {
     loadRoles();
   }, []);
 
-  // Config schema for the form
-  const formConfig = {
+  // ✅ FIX: useMemo to prevent re-creating config
+  const formConfig = useMemo(() => ({
     title: "Add Employee",
     sections: [
       {
@@ -82,9 +78,8 @@ const AddEmployee = () => {
       },
     ],
     submitButton: { label: "Save Employee" },
-  };
+  }), [roles]); // only recreate when roles change
 
-  // Submit handler
   const handleSubmit = async (formData) => {
     const userPayload = {
       username: formData.email.split("@")[0],

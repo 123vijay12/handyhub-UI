@@ -1,5 +1,5 @@
 // src/pages/SubcategoriesPage.jsx
-import React, { useState, useEffect } from "react";
+import  { useState, useEffect } from "react";
 import {
   Card, CardContent, CardActions, Button, Typography,
   Grid, Dialog, DialogTitle, DialogContent, DialogActions,

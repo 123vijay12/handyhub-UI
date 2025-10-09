@@ -35,72 +35,80 @@ const handleLogout = () => {
 
 
   return (
-    <AppBar position="fixed" color="default" elevation={1} sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
-      <Toolbar sx={{ px: { xs: 2, lg: 8 }, ml: { lg: '256px' }, height: 64 }}>
-        {/* Menu Button and Logo */}
-        <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center' }}>
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="toggle sidebar"
-            onClick={() => setSidebarOpen((prev) => !prev)}
-            sx={{ display: { lg: 'none' }, mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap component="div" sx={{ fontWeight: 600, color: 'text.primary' }}>
-            HandyHub
-          </Typography>
-        </Box>
+<AppBar
+  position="fixed"
+  elevation={1}
+  sx={{
+    backgroundColor: "#1f2937", // same as Tailwind bg-gray-800
+    color: "#fff",              // white text/icons
+    zIndex: (theme) => theme.zIndex.drawer + 1,
+  }}
+>
+  <Toolbar sx={{ px: { xs: 2, lg: 8 }, ml: { lg: '256px' }, height: 64 }}>
+    {/* Menu Button and Logo */}
+    <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center' }}>
+      <IconButton
+        edge="start"
+        color="inherit"
+        aria-label="toggle sidebar"
+        onClick={() => setSidebarOpen((prev) => !prev)}
+        sx={{ display: { lg: 'none' }, mr: 2 }}
+      >
+        <MenuIcon />
+      </IconButton>
+      <Typography
+        variant="h6"
+        noWrap
+        component="div"
+        sx={{ fontWeight: 600, color: "#fff" }} // force white text
+      >
+        HandyHub
+      </Typography>
+    </Box>
 
-        {/* Right icons */}
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-          <IconButton color="inherit" aria-label="notifications">
-            <NotificationsNoneIcon />
-          </IconButton>
+    {/* Right icons */}
+    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+      <IconButton color="inherit">
+        <NotificationsNoneIcon />
+      </IconButton>
+      <IconButton
+        color="inherit"
+        aria-controls={anchorEl ? 'settings-menu' : undefined}
+        aria-haspopup="true"
+        aria-expanded={Boolean(anchorEl)}
+        onClick={handleSettingsClick}
+      >
+        <SettingsIcon />
+      </IconButton>
+      <Menu
+        id="settings-menu"
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleSettingsClose}
+        PaperProps={{
+          elevation: 3,
+          sx: { width: 160 },
+        }}
+      >
+        <MenuItem onClick={handleLogout} sx={{ gap: 1 }}>
+          <LogoutIcon fontSize="small" />
+          Logout
+        </MenuItem>
+      </Menu>
 
-          <IconButton
-            color="inherit"
-            aria-label="settings"
-            aria-controls={anchorEl ? 'settings-menu' : undefined}
-            aria-haspopup="true"
-            aria-expanded={Boolean(anchorEl)}
-            onClick={handleSettingsClick}
-          >
-            <SettingsIcon />
-          </IconButton>
+      <Avatar
+        alt="User Avatar"
+        src="https://i.pravatar.cc/150?img=32"
+        sx={{
+          width: 36,
+          height: 36,
+          border: '2px solid',
+          borderColor: 'primary.main',
+        }}
+      />
+    </Box>
+  </Toolbar>
+</AppBar>
 
-          <Menu
-            id="settings-menu"
-            anchorEl={anchorEl}
-            open={Boolean(anchorEl)}
-            onClose={handleSettingsClose}
-            anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'right',
-            }}
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
-            PaperProps={{
-              elevation: 3,
-              sx: { width: 160 },
-            }}
-          >
-            <MenuItem onClick={handleLogout} sx={{ gap: 1 }}>
-              <LogoutIcon fontSize="small" />
-              Logout
-            </MenuItem>
-          </Menu>
-
-          <Avatar
-            alt="User Avatar"
-            src="https://i.pravatar.cc/150?img=32"
-            sx={{ width: 36, height: 36, border: '2px solid', borderColor: 'primary.main' }}
-          />
-        </Box>
-      </Toolbar>
-    </AppBar>
   );
 }

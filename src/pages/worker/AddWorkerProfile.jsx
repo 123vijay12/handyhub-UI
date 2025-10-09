@@ -31,28 +31,34 @@ const AddWorker = () => {
     } else {
       try {
         // Combine userDTO and worker details for API
-        const payload = {
-          profession: updated.profession,
-          experience: updated.experience,
-          hourlyRate: parseFloat(updated.hourlyRate),
-          serviceArea: updated.serviceArea,
-          available: updated.available,
-          userDTO: {
-            employeeId: updated.employeeId,
-            firstName: updated.firstName,
-            lastName: updated.lastName,
-            email: updated.email,
-            password: updated.password,
-            phone: updated.phone,
-            dateOfBirth: updated.birthDate,
-            gender: updated.gender,
-            address: updated.address,
-            city: updated.city,
-            state: updated.state,
-            country: updated.country,
-          },
-        };
-
+          const payload = {
+            profession: updated.profession,
+            experience: updated.experience,
+            hourlyRate: parseFloat(updated.hourlyRate),
+            serviceArea: updated.serviceArea,
+            available: updated.available,
+            subCategoryId: updated.subcategoryId,   // ✅ from response
+            categoryId: updated.categoryId,
+            skills: updated.skills
+              ? updated.skills.split(",").map((s) => s.trim()) // ✅ convert string → array
+              : [],
+            userDTO: {
+              employeeId: updated.employeeId,
+              firstName: updated.firstName,
+              lastName: updated.lastName,
+              email: updated.email,
+              password: updated.password,
+              phone: updated.phone,
+              dateOfBirth: updated.birthDate, // ✅ rename
+              gender: updated.gender,
+              address: updated.address,
+              city: updated.city,
+              state: updated.state,
+              country: updated.country,
+            },
+          };
+          console.log("before submiting..",updated)
+    console.log("before submiting..",payload)
         await createWorkerProfile(payload);
 
         setSnackbar({ open: true, msg: "Worker profile created!", severity: "success" });

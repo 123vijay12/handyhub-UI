@@ -70,19 +70,24 @@ const EditWorker = () => {
       setActiveStep((prev) => prev + 1);
     } else {
       try {
-        const payload = {
+      const payload = {
           profession: updated.profession,
           experience: updated.experience,
           hourlyRate: parseFloat(updated.hourlyRate),
           serviceArea: updated.serviceArea,
           available: updated.available,
+          subCategoryId: updated.subcategoryId,   // added subCategoryId
+          categoryId:updated.categoryId,
+          skills: updated.skills
+            ? updated.skills.split(",").map((s) => s.trim()) // convert string → array
+            : [],
           userDTO: {
             employeeId: updated.employeeId,
             firstName: updated.firstName,
             lastName: updated.lastName,
             email: updated.email,
             phone: updated.phone,
-            dateOfBirth: updated.birthDate,
+            dateOfBirth: updated.birthDate, // ensure key matches backend
             gender: updated.gender,
             address: updated.address,
             city: updated.city,
@@ -90,6 +95,7 @@ const EditWorker = () => {
             country: updated.country,
           },
         };
+
 
         await updateWorkerProfile(id, payload);
         setSnackbar({ open: true, msg: "Worker profile updated!", severity: "success" });
