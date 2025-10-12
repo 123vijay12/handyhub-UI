@@ -1,121 +1,89 @@
-import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import {
-  Box,
-  Grid,
-  Card,
-  Typography,
-  Button,
-  Avatar,
-  Paper,
-  Rating,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  IconButton,
-  Snackbar,
-  Alert,
+  Box, Grid, Card, Typography, Button, Avatar, Paper, Rating, Snackbar, Alert,
 } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
 import { getWorkerProfileById } from "../../api/workerProfileApi";
 import { createBooking } from "../../api/bookingApi";
-import DynamicModalForm from "../../components/modal/DynamicModalForm";
-import BookingConfirmation from "../../components/modal/BookingConfirmation";
+import BookingDrawer from "../../components/modal/BookingForm";
 
 export default function WorkerProfilePage() {
   const { workerId } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const queryParams = new URLSearchParams(location.search);
+  const categoryId = queryParams.get("category");
+  const subcategoryId = queryParams.get("subcategory");
+
   const [worker, setWorker] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [openBooking, setOpenBooking] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
-  // Snackbar states
+  // Snackbar
   const [bookingSuccess, setBookingSuccess] = useState(false);
-  const [bookingError, setBookingError] = useState(false);
+  const [bookingError, setBookingError] = useState("");
 
   useEffect(() => {
-    if (workerId) {
-      getWorkerProfileById(workerId)
-        .then((res) => {
-          const data = res.data;
-          const mappedWorker = {
-            id: data.id,
-            name: `${data.userDTO.firstName || ""} ${data.userDTO.lastName || ""}`,
-            profession: data.userDTO.rolesData?.[0]?.name || "Worker",
-            experience: data.experience || "N/A",
-            hourlyRate: data.hourlyRate || 0,
-            serviceArea: data.serviceArea || data.userDTO.city || "Unknown",
-            available: data.available,
-            profileImage: data.userDTO.profilePictureUrl || "/avatar.jpeg",
-            phone: data.userDTO.phone || "N/A",
-            email: data.userDTO.email || "N/A",
-            address: data.userDTO.address || "N/A",
-            state: data.userDTO.state || "N/A",
-            country: data.userDTO.country || "N/A",
-            skills: data.skills || [],
-            feedbacks: data.ratings || [],
-            pastWork: data.pastWork || [],
-          };
-          setWorker(mappedWorker);
-        })
-        .catch((err) => console.error("Error fetching worker:", err))
-        .finally(() => setLoading(false));
-    }
+    if (!workerId) return;
+    setLoading(true);
+    getWorkerProfileById(workerId)
+      .then((res) => {
+        const data = res.data;
+        const mappedWorker = {
+          id: data.id,
+          name: `${data.userDTO.firstName || ""} ${data.userDTO.lastName || ""}`,
+          profession: data.userDTO.rolesData?.[0]?.name || "Worker",
+          experience: data.experience || "N/A",
+          hourlyRate: data.hourlyRate || 0,
+          serviceArea: data.serviceArea || data.userDTO.city || "Unknown",
+          available: data.available,
+          profileImage: data.userDTO.profilePictureUrl || "/avatar.jpeg",
+          phone: data.userDTO.phone || "N/A",
+          email: data.userDTO.email || "N/A",
+          address: data.userDTO.address || "",
+          state: data.userDTO.state || "N/A",
+          country: data.userDTO.country || "N/A",
+          skills: data.skills || [],
+          feedbacks: data.ratings || [],
+          pastWork: data.pastWork || [],
+        };
+        setWorker(mappedWorker);
+      })
+      .catch((err) => {
+        console.error("Error fetching worker:", err);
+        setWorker(null);
+      })
+      .finally(() => setLoading(false));
   }, [workerId]);
 
   if (loading) return <Typography>Loading...</Typography>;
   if (!worker) return <Typography>No worker found.</Typography>;
 
   const averageRating =
-    worker.feedbacks && worker.feedbacks.length > 0
+    worker.feedbacks?.length
       ? worker.feedbacks.reduce((a, b) => a + b.rating, 0) / worker.feedbacks.length
       : 0;
 
-  const getRatingColor = (rating) =>
-    rating >= 4 ? "green" : rating >= 3 ? "orange" : "red";
+  const getRatingColor = (rating) => (rating >= 4 ? "green" : rating >= 3 ? "orange" : "red");
 
-  // Booking form configuration
-  const bookingFormConfig = {
-    title: `Book ${worker.name}`,
-    sections: [
-      {
-        title: "Booking Details",
-        fields: [
-          { label: "Start Time", name: "scheduledStartTime", type: "datetime", required: true },
-          { label: "End Time", name: "scheduledEndTime", type: "datetime", required: true },
-          { label: "Address", name: "address", type: "text", defaultValue: worker.address, required: true },
-          { label: "Description", name: "description", type: "textarea" },
-          { label: "Estimated Price", name: "estimatedPrice", type: "number", defaultValue: worker.hourlyRate, required: true },
-        ],
-      },
-    ],
-    submitButton: { label: "Confirm Booking" },
-  };
-
-  // Booking submit handler
-  const handleBookingSubmit = async (formData) => {
-    const customerId = localStorage.getItem("userId");
-    if (!customerId) return setBookingError(true);
-
+  // This is called by BookingDrawer on submit
+  const submitBooking = async (payload) => {
     try {
-      const payload = {
-        customerId: Number(customerId),
-        workerId: worker.id,
-        subcategoryId: 12,
-        ...formData,
-      };
       await createBooking(payload);
 
       // optional success sound
-    // Play confirmation sound from public folder
-    const successSound = new Audio("/smile-ringtone.mp3"); // path relative to public
-    successSound.play();
+      const successSound = new Audio("/smile-ringtone.mp3");
+      successSound.play().catch(() => {});
 
+      setBookingError("");
       setBookingSuccess(true);
-      setOpenBooking(false);
+      setDrawerOpen(false);
     } catch (err) {
       console.error(err);
-      setBookingError(true);
+      setBookingError(err?.response?.data?.message || "Booking failed. Please try again.");
+      setBookingSuccess(false);
+      throw err; // let drawer show inline error too if needed
     }
   };
 
@@ -125,20 +93,16 @@ export default function WorkerProfilePage() {
         &larr; Back
       </Button>
 
-      {/* User Profile */}
+      {/* Worker Profile */}
       <Paper sx={{ p: 3, mb: 3 }}>
         <Box display="flex" gap={3} flexWrap="wrap" alignItems="center">
-          <Avatar
-            src={worker.profileImage}
-            alt={worker.name}
-            sx={{ width: 130, height: 130 }}
-          />
+          <Avatar src={worker.profileImage} alt={worker.name} sx={{ width: 130, height: 130 }} />
           <Box flex={1} minWidth={200}>
             <Typography variant="h4" fontWeight="bold">{worker.name}</Typography>
             <Typography variant="h6" color="text.secondary">{worker.profession}</Typography>
             <Typography variant="body2" color="text.secondary">{worker.experience} experience</Typography>
             <Typography variant="body2" color="text.secondary">Service: {worker.serviceArea}</Typography>
-            <Typography variant="body2" color="text.secondary">Hourly Rate: ${worker.hourlyRate}</Typography>
+            <Typography variant="body2" color="text.secondary">Hourly Rate: ₹{worker.hourlyRate}</Typography>
             <Typography variant="body2" color={worker.available ? "green" : "red"} fontWeight="bold">
               {worker.available ? "Available" : "Not Available"}
             </Typography>
@@ -161,68 +125,22 @@ export default function WorkerProfilePage() {
             color="secondary"
             sx={{ height: 40, whiteSpace: "nowrap" }}
             disabled={!worker.available}
-            onClick={() => setOpenBooking(true)}
+            onClick={() => setDrawerOpen(true)}
           >
             Book Now
           </Button>
         </Box>
       </Paper>
 
-      {/* Booking Modal */}
-      <Dialog open={openBooking} onClose={() => setOpenBooking(false)} maxWidth="sm" fullWidth>
-        <DialogTitle>
-          Book {worker.name}
-          <IconButton
-            aria-label="close"
-            onClick={() => setOpenBooking(false)}
-            sx={{ position: 'absolute', right: 8, top: 8 }}
-          >
-            <CloseIcon />
-          </IconButton>
-        </DialogTitle>
-        <DialogContent dividers>
-          <DynamicModalForm
-            open={openBooking}
-            onClose={() => setOpenBooking(false)}
-            config={bookingFormConfig}
-            onSubmit={handleBookingSubmit}
-          />
-        </DialogContent>
-      </Dialog>
-
-      {/* Booking Success Snackbar */}
-      <Snackbar
-        open={bookingSuccess}
-        autoHideDuration={4000}
-        onClose={() => setBookingSuccess(false)}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-      >
-        <Alert
-          onClose={() => setBookingSuccess(false)}
-          severity="success"
-          sx={{ width: "100%", borderRadius: 2 }}
-        >
-          Booking confirmed successfully!
-        </Alert>
-      </Snackbar>
-
-    {bookingSuccess && (
-  <BookingConfirmation
-    open={bookingSuccess}
-    message="Booking confirmed successfully!"
-    onClose={() => setBookingSuccess(false)}
-  />
-)}
-
-{bookingError && (
-  <BookingConfirmation
-    open={bookingError}
-    message="Booking failed. Please try again."
-    onClose={() => setBookingError(true)}
-    type="error"
-  />
-)}
-
+      {/* Booking Drawer (Minimal Required Form) */}
+      <BookingDrawer
+        open={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+        worker={worker}
+        categoryId={categoryId}
+        subcategoryId={subcategoryId}
+        onSubmit={submitBooking}
+      />
 
       {/* Skills */}
       {worker.skills.length > 0 && (
@@ -255,39 +173,28 @@ export default function WorkerProfilePage() {
         </Paper>
       )}
 
-      {/* Ratings & Feedback */}
-      {worker.feedbacks.length > 0 && (
-        <Paper sx={{ p: 2 }}>
-          <Typography variant="h6" fontWeight="bold" mb={1}>Ratings & Feedback</Typography>
-          <Grid container spacing={1}>
-            {worker.feedbacks.map((fb, idx) => (
-              <Grid item xs={12} sm={6} md={4} key={idx}>
-                <Card
-                  sx={{
-                    p: 1,
-                    borderLeft: `5px solid ${getRatingColor(fb.rating)}`,
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: 0.5
-                  }}
-                >
-                  <Box display="flex" justifyContent="space-between" alignItems="center">
-                    <Typography variant="body2" fontWeight="bold">{fb.user}</Typography>
-                    <Rating
-                      value={fb.rating}
-                      precision={0.1}
-                      readOnly
-                      size="small"
-                      sx={{ color: getRatingColor(fb.rating) }}
-                    />
-                  </Box>
-                  <Typography variant="body2">{fb.comment}</Typography>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
-        </Paper>
-      )}
+      {/* Global Snackbars */}
+      <Snackbar
+        open={!!bookingError}
+        autoHideDuration={4500}
+        onClose={() => setBookingError("")}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert onClose={() => setBookingError("")} severity="error" sx={{ width: "100%", borderRadius: 2 }}>
+          {bookingError}
+        </Alert>
+      </Snackbar>
+
+      <Snackbar
+        open={bookingSuccess}
+        autoHideDuration={3500}
+        onClose={() => setBookingSuccess(false)}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert onClose={() => setBookingSuccess(false)} severity="success" sx={{ width: "100%", borderRadius: 2 }}>
+          Booking confirmed successfully!
+        </Alert>
+      </Snackbar>
     </Box>
   );
 }

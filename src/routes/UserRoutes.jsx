@@ -10,6 +10,8 @@ import EditWorker from "../pages/worker/EditWorker";
 import BrowseCategoriesPage from "../pages/category/BrowseCategoriesPage";
 import BrowseSubcategoriesPage from "../pages/category/BrowseSubcategoriesPage";
 import WorkerProfilePage from "../pages/worker/WorkerProfilePage";
+import WorkerJobs from "../pages/worker/WorkerJobs";
+import UserBookings from "../pages/user/UserBookings";
 
 const userRoutes = [
   <Route key="user-list" path="/users" element={<EmployeeTabs />} />,
@@ -22,6 +24,8 @@ const userRoutes = [
   <Route key="subcategory-list" path="/categories/:categoryId/subcategories" element={<SubcategoriesPage />} />,
   <Route path="/browse/categories" element={<BrowseCategoriesPage />} />,
   <Route path="/worker-profile/:workerId" element={<WorkerProfilePage />} />,
+    <Route key="user-bookings" path="/my-bookings" element={<UserBookings />} />,
+  <Route key="worker-jobs" path="/worker/jobs" element={<WorkerJobs />} />,
   <Route path="/browse/categories/:categoryId/subcategories" element={<BrowseSubcategoriesPage />} />
 ];
 

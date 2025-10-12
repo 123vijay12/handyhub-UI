@@ -4,6 +4,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { AuthProvider } from './Context/AuthContext';
+import { BookingProvider } from './Context/BookingStore';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -11,8 +12,11 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
       <AuthProvider>
-    <App />
+        <BookingProvider>
+      <App />
+        </BookingProvider>
     </AuthProvider>
+
   </React.StrictMode>
 );
 

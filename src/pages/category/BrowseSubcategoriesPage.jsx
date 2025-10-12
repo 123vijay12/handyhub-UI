@@ -147,7 +147,11 @@ export default function BrowseWorkersPage() {
                 <Button
                   variant="contained"
                   color="secondary"
-                  onClick={() => navigate(`/worker-profile/${worker.id}`)}
+                    onClick={() =>
+                      navigate(
+                        `/worker-profile/${worker.id}?category=${categoryId}&subcategory=${selectedSub || 0}`
+                      )
+                    }
                 >
                   View Profile
                 </Button>
