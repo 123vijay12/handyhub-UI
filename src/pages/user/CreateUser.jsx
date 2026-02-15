@@ -3,6 +3,8 @@ import DynamicForm from "../../components/util/DynamicForm";
 import { fetchRoles } from "../../api/roleApi";
 import { createUser } from "../../api/userApi";
 import CustomSnackbar from "../../components/util/CustomSnackbar";
+import { useNavigate } from "react-router-dom";
+
 
 const AddEmployee = () => {
   const [roles, setRoles] = useState([]);
@@ -10,6 +12,8 @@ const AddEmployee = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMsg, setSnackbarMsg] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
+  const navigate = useNavigate();
+
 
   const showSnackbar = (message, severity = "success") => {
     setSnackbarMsg(message);
@@ -108,6 +112,8 @@ const AddEmployee = () => {
       const response = await createUser(userPayload);
       console.log("User added:", response.data);
       showSnackbar("Employee added successfully", "success");
+       // ✅ Redirect to users list
+      navigate("/handyhub/users");
     } catch (error) {
       console.error("Error adding employee:", error);
       showSnackbar("Failed to add employee", "error");

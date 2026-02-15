@@ -79,7 +79,7 @@ const CategoryPage = () => {
   };
 
 return (
-  <Box
+  <Box  
     p={4}
     bgcolor="#f9fafc"
     minHeight="100vh"
@@ -158,7 +158,7 @@ return (
                   size="small"
                   variant="outlined"
                   color="primary"
-                  onClick={() => navigate(`/categories/${cat.categoryId}/subcategories`)}
+                  onClick={() => navigate(`/handyhub/categories/${cat.categoryId}/subcategories`)}
                   sx={{ textTransform: "none" }}
                 >
                   View Subcategories

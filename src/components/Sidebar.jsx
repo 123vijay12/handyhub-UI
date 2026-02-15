@@ -34,7 +34,7 @@ const hasAccess = (userRoles, allowed = []) => !allowed.length || userRoles.some
 const navItems = [
   {
     type: "link",
-    to: "/",
+    to: "/handyhub/",
     label: "Dashboard",
     icon: <LayoutDashboard className="w-5 h-5" />,
     allowedRoles: ["ADMIN", "EMPLOYEE", "USER"],
@@ -46,8 +46,8 @@ const navItems = [
     allowedRoles: ["ADMIN"],
     id: "manage",
     children: [
-      { to: "/users", label: "Users", icon: <Users className="w-4 h-4" />, allowedRoles: ["ADMIN"] },
-      { to: "/categories", label: "Service", icon: <Boxes className="w-4 h-4" />, allowedRoles: ["ADMIN", "EMPLOYEE"] },
+      { to: "/handyhub/users", label: "Users", icon: <Users className="w-4 h-4" />, allowedRoles: ["ADMIN"] },
+      { to: "/handyhub/categories", label: "Service", icon: <Boxes className="w-4 h-4" />, allowedRoles: ["ADMIN", "EMPLOYEE"] },
     ],
   },
   {
@@ -57,8 +57,8 @@ const navItems = [
     allowedRoles: ["ADMIN", "USER"],
     id: "find-workers",
     children: [
-      { to: "/browse/categories", label: "Categories", icon: <Boxes className="w-4 h-4" />, allowedRoles: ["ADMIN", "USER"] },
-      { to: "/browse/workers", label: "Workers", icon: <UserCircle className="w-4 h-4" />, allowedRoles: ["ADMIN", "USER"] },
+      { to: "/handyhub/browse/categories", label: "Categories", icon: <Boxes className="w-4 h-4" />, allowedRoles: ["ADMIN", "USER"] },
+      { to: "/handyhub/browse/workers", label: "Workers", icon: <UserCircle className="w-4 h-4" />, allowedRoles: ["ADMIN", "USER"] },
     ],
   },
   {
@@ -69,13 +69,13 @@ const navItems = [
     id: "bookings",
     children: [
       {
-        to: "/my-bookings",
+        to: "/handyhub/my-bookings",
         label: "My Bookings",
         icon: <UserCircle className="w-4 h-4" />,
         allowedRoles: ["USER","ADMIN"],
       },
       {
-        to: "/worker/jobs",
+        to: "/handyhub/worker/jobs",
         label: "Worker Jobs",
         icon: <Users className="w-4 h-4" />,
         allowedRoles: ["WORKER", "ADMIN"],
@@ -84,7 +84,7 @@ const navItems = [
   },
   {
     type: "link",
-    to: "/profile",
+    to: "/handyhub/profile",
     label: "Profile",
     icon: <UserCircle className="w-5 h-5" />,
     allowedRoles: ["ADMIN", "EMPLOYEE", "USER", "WORKER"],

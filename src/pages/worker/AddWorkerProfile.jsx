@@ -58,15 +58,25 @@ const AddWorker = () => {
             },
           };
           console.log("before submiting..",updated)
-    console.log("before submiting..",payload)
+           console.log("before submiting..",payload)
         await createWorkerProfile(payload);
 
         setSnackbar({ open: true, msg: "Worker profile created!", severity: "success" });
-        setTimeout(() => navigate("/workers"), 1500);
-      } catch (err) {
-        console.error(err);
-        setSnackbar({ open: true, msg: "Error creating worker", severity: "error" });
-      }
+        setTimeout(() => navigate("/handyhub/users"), 1500);
+      } catch (error) {
+            console.error("Error creating employee:", error);
+
+            const errorMessage =
+              error.response?.data?.message ||
+              error.response?.data?.error ||
+              "Something went wrong. Please try again.";
+
+            setSnackbar({
+              open: true,
+              msg: errorMessage,
+              severity: "error",
+            });
+          }
     }
   };
 

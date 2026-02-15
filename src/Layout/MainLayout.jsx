@@ -52,15 +52,18 @@ export default function MainLayout() {
         </div>
 
         {/* Outlet with translucent gradient */}
-        <main className="flex-1 overflow-y-auto with-sidebar-offset p-4">
-          <div
-            className="rounded-2xl shadow-lg
-                       bg-gradient-to-r from-gray-800/40 via-gray-500/30 to-gray-800/40
-                       text-white min-h-[80vh] backdrop-blur-sm mt-10"
-          >
-            <Outlet />
-          </div>
-        </main>
+       <main className="flex-1 overflow-y-auto with-sidebar-offset p-4">
+  <div className="mx-auto max-w-7xl">
+    <div
+      className="shadow-lg
+                 bg-gradient-to-r from-gray-800/40 via-gray-500/30 to-gray-800/40
+                 text-white rounded-xl p-4"
+    >
+      <Outlet />
+    </div>
+  </div>
+</main>
+
       </div>
     </div>
   );

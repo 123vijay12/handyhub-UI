@@ -59,7 +59,7 @@ export default function BrowseWorkersPage() {
   };
 
   return (
-    <Box display="flex" p={3} gap={3}>
+    <Box display="flex" p={3} gap={3} mt={8}>
       {/* Subcategory Panel */}
       <Paper
         elevation={3}
@@ -71,7 +71,7 @@ export default function BrowseWorkersPage() {
           gap: 2,
         }}
       >
-        <Typography variant="h6">Subcategories</Typography>
+        {/* <Typography variant="h6">Subcategories</Typography> */}
         <Button
           variant={!selectedSub ? "contained" : "outlined"}
           onClick={() => handleSubClick(null)}
@@ -123,11 +123,12 @@ export default function BrowseWorkersPage() {
               <Card sx={{ display: "flex", p: 2, alignItems: "center", gap: 2 }}>
                 <Box
                   component="img"
-                  src={
-                    worker.userDTO.profilePictureUrl
-                      ? worker.userDTO.profilePictureUrl
-                      : "/avatar.jpeg"
-                  }
+                 src={
+  worker.userDTO.profilePictureUrl
+    ? worker.userDTO.profilePictureUrl
+    : `${process.env.PUBLIC_URL}/avatar.jpeg` // ✅ correct
+}
+
                   alt={worker.userDTO.firstName || "User"}
                   width={100}
                   height={100}
@@ -149,7 +150,7 @@ export default function BrowseWorkersPage() {
                   color="secondary"
                     onClick={() =>
                       navigate(
-                        `/worker-profile/${worker.id}?category=${categoryId}&subcategory=${selectedSub || 0}`
+                        `/handyhub/workers/profile/${worker.id}?category=${categoryId}&subcategory=${selectedSub || 0}`
                       )
                     }
                 >

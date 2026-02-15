@@ -99,7 +99,7 @@ const EditWorker = () => {
 
         await updateWorkerProfile(id, payload);
         setSnackbar({ open: true, msg: "Worker profile updated!", severity: "success" });
-        setTimeout(() => navigate("/workers"), 1500);
+        setTimeout(() => navigate("/handyhub/workers"), 1500);
       } catch (err) {
         console.error(err);
         setSnackbar({ open: true, msg: "Error updating worker", severity: "error" });

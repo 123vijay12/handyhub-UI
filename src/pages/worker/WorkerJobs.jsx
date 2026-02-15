@@ -11,7 +11,7 @@ export default function WorkerJobs() {
   const [selected, setSelected] = useState(null);
   const [open, setOpen] = useState(false);
 
-  const workerId = localStorage.getItem("userId");
+  const workerId = localStorage.getItem("workerID");
 
   const fetchData = () =>
     getBookingsByWorker(workerId).then((res) => setBookings(res.data || []));
@@ -41,12 +41,12 @@ useEffect(() => {
   return (
     <Box sx={{ bgcolor: "#f6f7fb", minHeight: "100vh" }}>
       <AppBar position="static" color="primary" elevation={1}>
-        <Toolbar>
+        {/* <Toolbar>
           <Typography variant="h6" sx={{ flex: 1 }}>
             Worker Jobs
           </Typography>
           <Avatar sx={{ bgcolor: "white", color: "primary.main" }}>W</Avatar>
-        </Toolbar>
+        </Toolbar> */}
       </AppBar>
 
       <Tabs value={tab} onChange={(_, v) => setTab(v)} centered>

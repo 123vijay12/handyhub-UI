@@ -38,7 +38,7 @@ return (
                 },
               }}
               onClick={() =>
-                navigate(`/browse/categories/${cat.categoryId}/subcategories`)
+                navigate(`/handyhub/browse/categories/${cat.categoryId}/subcategories`)
               }
             >
               {/* Image Section */}

@@ -34,7 +34,7 @@ const DynamicTable = ({
         width: "100%",
       }}
     >
-      {title && (
+      {/* {title && (
         <Typography
           variant="h6"
           p={2}
@@ -43,7 +43,7 @@ const DynamicTable = ({
         >
           {title}
         </Typography>
-      )}
+      )} */}
       <div style={{ overflowX: "auto" }}> {/* horizontal scroll wrapper */}
         <Table stickyHeader>
           <TableHead>

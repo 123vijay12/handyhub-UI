@@ -16,7 +16,7 @@ export default function Navbar({ setSidebarOpen, onLogout, sidebarWidth }) {
 
   const handleLogout = () => {
     localStorage.clear();
-    navigate("/login");
+    navigate("/handyhub/login");
     if (onLogout) onLogout();
   };
 

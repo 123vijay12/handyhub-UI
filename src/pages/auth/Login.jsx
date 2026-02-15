@@ -26,8 +26,10 @@ const handleSubmit = async (e) => {
     localStorage.setItem("userId", data.userId);
     localStorage.setItem("roles", JSON.stringify(data.roles));
     localStorage.setItem("username", data.username);
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("workerID",data.workerID);
 
-    navigate("/");
+    navigate("/handyhub/");
   } catch (err) {
     alert(err.response?.data?.message || "Invalid credentials");
   } finally {
@@ -106,7 +108,7 @@ const handleSubmit = async (e) => {
           <button
             type="button"
             className="text-indigo-600 hover:underline font-medium"
-            onClick={() => navigate("/register")}
+            onClick={() => navigate("/handyhub/register")}
           >
             Register
           </button>

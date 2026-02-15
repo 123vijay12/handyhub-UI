@@ -23,7 +23,7 @@ export default function NotFoundPage() {
         {/* Action button */}
         <div className="mt-6">
           <Link
-            to="/login"
+            to="/handyhub/login"
             className="px-6 py-3 text-white font-semibold rounded-lg shadow-md bg-gradient-to-r from-indigo-500 to-blue-500 hover:from-indigo-600 hover:to-blue-600 transition-all duration-200 ease-in-out"
           >
             Go Back Home

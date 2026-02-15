@@ -73,8 +73,10 @@ export default function WorkerProfilePage() {
       await createBooking(payload);
 
       // optional success sound
-      const successSound = new Audio("/smile-ringtone.mp3");
-      successSound.play().catch(() => {});
+// optional success sound
+const successSound = new Audio(`${process.env.PUBLIC_URL}/smile-ringtone.mp3`);
+successSound.play().catch(() => {});
+
 
       setBookingError("");
       setBookingSuccess(true);
@@ -88,7 +90,7 @@ export default function WorkerProfilePage() {
   };
 
   return (
-    <Box p={2}>
+    <Box p={2} mt={8}>
       <Button variant="outlined" onClick={() => navigate(-1)} sx={{ mb: 2 }}>
         &larr; Back
       </Button>
@@ -100,6 +102,7 @@ export default function WorkerProfilePage() {
           <Box flex={1} minWidth={200}>
             <Typography variant="h4" fontWeight="bold">{worker.name}</Typography>
             <Typography variant="h6" color="text.secondary">{worker.profession}</Typography>
+            <Typography variant="body2" >{worker.email}</Typography>
             <Typography variant="body2" color="text.secondary">{worker.experience} experience</Typography>
             <Typography variant="body2" color="text.secondary">Service: {worker.serviceArea}</Typography>
             <Typography variant="body2" color="text.secondary">Hourly Rate: ₹{worker.hourlyRate}</Typography>

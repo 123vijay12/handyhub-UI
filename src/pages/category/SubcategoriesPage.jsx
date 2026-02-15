@@ -171,9 +171,9 @@ const SubcategoriesPage = () => {
                 {/* Action Buttons */}
                 <CardActions sx={{ px: 2, pb: 2, gap: 1 }}>
                   <Button
-   size="small"
-            variant="contained"
-            color="secondary"
+                    size="small"
+                    variant="contained"
+                    color="secondary"
                     onClick={() => handleEditClick(sub)}
                   >
                     Edit
