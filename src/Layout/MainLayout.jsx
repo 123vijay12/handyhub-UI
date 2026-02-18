@@ -24,7 +24,7 @@ export default function MainLayout() {
 
   return (
     <div
-      className="min-h-screen flex bg-gray-100 overflow-hidden"
+      className="min-h-screen flex bg-gray-100"
       style={{ "--sidebar-w": `${sidebarWidth}px` }}
     >
       {/* Sidebar */}
@@ -38,11 +38,13 @@ export default function MainLayout() {
       </div>
 
       {/* Main content */}
-      <div className="flex flex-col flex-1 h-screen">
-        {/* Optional: small CSS to apply margin-left at lg breakpoint */}
+      <div className="flex flex-col flex-1 min-h-screen">
+        {/* Sidebar offset only for desktop */}
         <style>{`
           @media (min-width: 1024px) {
-            .with-sidebar-offset { margin-left: var(--sidebar-w); }
+            .with-sidebar-offset {
+              margin-left: var(--sidebar-w);
+            }
           }
         `}</style>
 
@@ -51,19 +53,19 @@ export default function MainLayout() {
           <Navbar setSidebarOpen={setSidebarOpen} sidebarWidth={sidebarWidth} />
         </div>
 
-        {/* Outlet with translucent gradient */}
-       <main className="flex-1 overflow-y-auto with-sidebar-offset p-4">
-  <div className="mx-auto max-w-7xl">
-    <div
-      className="shadow-lg
-                 bg-gradient-to-r from-gray-800/40 via-gray-500/30 to-gray-800/40
-                 text-white rounded-xl p-4"
-    >
-      <Outlet />
-    </div>
-  </div>
-</main>
-
+        {/* MAIN SCROLL AREA (ONLY ONE SCROLL CONTAINER) */}
+        <main className="flex-1 with-sidebar-offset overflow-y-auto p-3">
+          <div className="mx-auto max-w-7xl">
+            {/* <div
+              className="
+                bg-gradient-to-r from-gray-800/40 via-gray-500/30 to-gray-800/40
+                rounded-xl p-3
+              "
+            > */}
+              <Outlet />
+            {/* </div> */}
+          </div>
+        </main>
       </div>
     </div>
   );

@@ -1,121 +1,92 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { login } from "../../api/auth";
+import { useAuth } from "../../Context/AuthContext";
+import { CircularProgress } from "@mui/material";
 
 const Login = () => {
   const [form, setForm] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+const { loginUser } = useAuth();
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  if (!form.email || !form.password) return;
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  setLoading(true);
-  try {
-    const { data } = await login({
-      email: form.email,
-      password: form.password
-    });
+    if (!form.email || !form.password) {
+      console.warn("Email or password missing");
+      return;
+    }
 
-    // Store user data in localStorage
-    localStorage.setItem("userId", data.userId);
-    localStorage.setItem("roles", JSON.stringify(data.roles));
-    localStorage.setItem("username", data.username);
-    localStorage.setItem("token", data.token);
-    localStorage.setItem("workerID",data.workerID);
+    setLoading(true);
+    try {
+      const { data } = await login({
+        email: form.email,
+        password: form.password
+      });
 
-    navigate("/handyhub/");
-  } catch (err) {
-    alert(err.response?.data?.message || "Invalid credentials");
-  } finally {
-    setLoading(false);
-  }
-};
+
+      // Store user data in localStorage
+      localStorage.setItem("userId", data.userId);
+      localStorage.setItem("roles", JSON.stringify(data.roles));
+      localStorage.setItem("username", data.username);
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("workerID", data.workerID);
+      
+      loginUser();
+      navigate("/handyhub/");
+    } catch (err) {
+      console.error("Login error:", err.response?.data || err.message);
+      alert(err.response?.data?.message || "Invalid credentials");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  //can you make it look good of this below UI
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-600 px-4">
-      <div className="bg-white p-8 rounded-xl shadow-lg w-full max-w-md">
-        <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">Welcome Back</h2>
+  <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-600 px-4">
+    <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+      <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">Welcome Back</h2>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div>
-            <label className="block mb-1 text-sm font-medium text-gray-700">Email</label>
-            <input
-              type="text"
-              name="email"
-              value={form.email}
-              onChange={handleChange}
-              required
-              placeholder="Enter email"
-              className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
-            />
-          </div>
-
-          <div>
-            <label className="block mb-1 text-sm font-medium text-gray-700">Password</label>
-            <input
-              type="password"
-              name="password"
-              value={form.password}
-              onChange={handleChange}
-              required
-              placeholder="Enter password"
-              className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
-            />
-          </div>
-
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <label className="block mb-2 text-sm font-medium text-gray-700">Email</label>
+          <input
+            type="email"
+            name="email"
+            value={form.email}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+          />
+        </div>
+        <div>
+          <label className="block mb-2 text-sm font-medium text-gray-700">Password</label>
+          <input
+            type="password"
+            name="password"
+            value={form.password}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+          />
+        </div>
+        <div className="flex items-center justify-between">
           <button
             type="submit"
-            className="w-full flex justify-center items-center bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 rounded-md transition duration-200 disabled:opacity-70"
-            disabled={loading}
+            className="w-full bg-indigo-500 text-white py-2 rounded hover:bg-indigo-600"
           >
-            {loading ? (
-              <>
-                <svg
-                  className="animate-spin mr-2 h-5 w-5 text-white"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  ></circle>
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8v8H4z"
-                  ></path>
-                </svg>
-                Processing...
-              </>
-            ) : (
-              "Login"
-            )}
-          </button>
-        </form>
-
-        <div className="mt-5 text-sm text-center text-gray-600">
-          Don't have an account?{" "}
-          <button
-            type="button"
-            className="text-indigo-600 hover:underline font-medium"
-            onClick={() => navigate("/handyhub/register")}
-          >
-            Register
+            {loading ? <CircularProgress size={20} color="white" /> : "Log In"}
           </button>
         </div>
-      </div>
+      </form>
     </div>
-  );
+  </div>
+);
 };
 
 export default Login;
