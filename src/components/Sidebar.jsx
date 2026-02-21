@@ -46,13 +46,14 @@ const navItems = [
     allowedRoles: ["ADMIN"],
     id: "manage",
     children: [
-      { to: "/handyhub/users", label: "Users", icon: <Users className="w-4 h-4" />, allowedRoles: ["ADMIN"] },
+      { to: "/handyhub/employees", label: "Employees", icon: <Users className="w-4 h-4" />, allowedRoles: ["ADMIN"] },
+      { to: "/handyhub/workers", label: "Workers", icon: <Users className="w-4 h-4" />, allowedRoles: ["ADMIN"] },
       { to: "/handyhub/categories", label: "Service", icon: <Boxes className="w-4 h-4" />, allowedRoles: ["ADMIN", "EMPLOYEE"] },
     ],
   },
   {
     type: "dropdown",
-    label: "Find Workers",
+    label: "Find Workers",  
     icon: <Users className="w-5 h-5" />,
     allowedRoles: ["ADMIN", "USER"],
     id: "find-workers",

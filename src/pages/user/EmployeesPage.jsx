@@ -1,7 +1,7 @@
 import { Box, Paper, Typography } from "@mui/material";
 import UserList from "./UserList";
 
-const EmployeeTabs = () => {
+const EmployeesPage = () => {
   return (
     <Box bgcolor="#f4f6f8" minHeight="100vh" py={4} px={3}>
       <Paper
@@ -26,4 +26,4 @@ const EmployeeTabs = () => {
   );
 };
 
-export default EmployeeTabs;
+export default EmployeesPage;

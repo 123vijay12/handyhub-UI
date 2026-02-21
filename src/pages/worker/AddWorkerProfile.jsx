@@ -62,7 +62,7 @@ const AddWorker = () => {
         await createWorkerProfile(payload);
 
         setSnackbar({ open: true, msg: "Worker profile created!", severity: "success" });
-        setTimeout(() => navigate("/handyhub/users"), 1500);
+        setTimeout(() => navigate("/handyhub/workers"), 1500);
       } catch (error) {
             console.error("Error creating employee:", error);
 
