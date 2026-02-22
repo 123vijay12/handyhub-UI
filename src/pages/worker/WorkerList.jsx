@@ -12,6 +12,7 @@ import {
   DialogActions,
   Typography,
   IconButton,
+  Tooltip,
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
@@ -71,8 +72,30 @@ const WorkersList = () => {
     { field: "employeeId", headerName: "Employee ID", width: 150 },
     { field: "firstName", headerName: "First Name", width: 150 },
     { field: "lastName", headerName: "Last Name", width: 150 },
-    { field: "email", headerName: "Email", width: 220 },
-    { field: "profession", headerName: "Profession", width: 150 },
+    { 
+      field: "email", 
+      headerName: "Email", 
+      width: 220,
+      renderCell: (params) => (
+        <Tooltip title={params.value} arrow>
+          <Typography sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', width: '100%' }}>
+            {params.value}
+          </Typography>
+        </Tooltip>
+      )
+    },
+    { 
+      field: "profession", 
+      headerName: "Profession", 
+      width: 150,
+      renderCell: (params) => (
+        <Tooltip title={params.value} arrow>
+          <Typography sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', width: '100%' }}>
+            {params.value}
+          </Typography>
+        </Tooltip>
+      )
+    },
     { field: "experience", headerName: "Experience", width: 120 },
     {
       field: "hourlyRate",
@@ -80,7 +103,18 @@ const WorkersList = () => {
       width: 120,
       valueFormatter: ({ value }) => `$${value}`,
     },
-    { field: "serviceArea", headerName: "Service Area", width: 150 },
+    { 
+      field: "serviceArea", 
+      headerName: "Service Area", 
+      width: 150,
+      renderCell: (params) => (
+        <Tooltip title={params.value} arrow>
+          <Typography sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', width: '100%' }}>
+            {params.value}
+          </Typography>
+        </Tooltip>
+      )
+    },
     {
       field: "available",
       headerName: "Available",
@@ -143,7 +177,7 @@ const WorkersList = () => {
   return (
     <Box>
       {/* Header */}
-      <Box mb={2} display="flex" justifyContent="space-between">
+      {/* <Box mb={2} display="flex" justifyContent="space-between">
         <Typography variant="h5" fontWeight={600}>
           Workers
         </Typography>
@@ -153,7 +187,7 @@ const WorkersList = () => {
         >
           Add Worker
         </Button>
-      </Box>
+      </Box> */}
 
       {/* DataGrid */}
       <Box height={600}>

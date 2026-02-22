@@ -1,25 +1,52 @@
-import { Box, Paper, Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import {
+  Box,
+  Button,
+  Typography,
+  Paper,
+} from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import BuildIcon from "@mui/icons-material/Build";
 import WorkersList from "./WorkerList";
 
 const WorkersPage = () => {
-  return (
-    <Box bgcolor="#f4f6f8" minHeight="100vh" py={4} px={3}>
-      <Paper
-        elevation={3}
-        sx={{
-          borderRadius: 3,
-          p: 3,
-          maxWidth: "1200px",
-          mx: "auto",
-          bgcolor: "#fff"
-        }}
-      >
-        {/* Header */}
-        <Typography variant="h4" fontWeight="bold" mb={3} textAlign="center">
-          Workers Management
-        </Typography>
+  const navigate = useNavigate();
 
-        {/* Content */}
+  return (
+    <Box>
+      {/* Header Section */}
+      <Box sx={{ mb: 4, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 2 }}>
+        <Box>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1 }}>
+            <BuildIcon sx={{ fontSize: 32, color: 'primary.main' }} />
+            <Typography variant="h4" sx={{ fontWeight: 700 }}>
+              Worker Management
+            </Typography>
+          </Box>
+          <Typography color="textSecondary">
+            Manage and view all worker profiles
+          </Typography>
+        </Box>
+        <Button
+          variant="contained"
+          startIcon={<AddIcon />}
+          onClick={() => navigate("/handyhub/workers/add")}
+          size="large"
+        >
+          Add Worker
+        </Button>
+      </Box>
+
+      {/* Content Card */}
+      <Paper sx={{ p: { xs: 2, md: 3 } }}>
+        <Box sx={{ mb: 3, pb: 2, borderBottom: '1px solid', borderColor: 'divider' }}>
+          <Typography variant="h6" sx={{ fontWeight: 600 }}>
+            All Workers
+          </Typography>
+          <Typography variant="body2" color="textSecondary">
+            View and manage all registered workers and their profiles
+          </Typography>
+        </Box>
         <WorkersList />
       </Paper>
     </Box>

@@ -23,51 +23,51 @@ export default function Navbar({ setSidebarOpen, onLogout, sidebarWidth }) {
   return (
     <AppBar
       position="fixed"
-      elevation={1}
+      elevation={2}
       sx={{
-        backgroundColor: "#1f2937",
+        backgroundImage: 'linear-gradient(135deg, #f97316 0%, #fb923c 100%)',
         color: "#fff",
         zIndex: (theme) => theme.zIndex.drawer + 1,
       }}
     >
       <Toolbar
         sx={{
-          px: { xs: 2, lg: 8 },
-          ml: { lg: `${sidebarWidth}px` }, // dynamic left margin
+          px: { xs: 2, sm: 3, lg: 4 },
           height: 64,
-          transition: (theme) =>
-            theme.transitions.create(['margin'], { duration: theme.transitions.duration.shorter }),
+          display: 'flex',
+          justifyContent: 'space-between',
         }}
       >
         {/* Left: menu + title */}
-        <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center' }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
           <IconButton
             edge="start"
             color="inherit"
             aria-label="toggle sidebar"
             onClick={() => setSidebarOpen((prev) => !prev)}
-            sx={{ display: { lg: 'none' }, mr: 2 }}
+            sx={{ display: { lg: 'none' }, mr: 1 }}
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div" sx={{ fontWeight: 600, color: "#fff" }}>
-            HandyHub
+          <Typography variant="h6" noWrap component="div" sx={{ fontWeight: 700, letterSpacing: '0.5px' }}>
+            LocalPro+
           </Typography>
         </Box>
 
         {/* Right: actions */}
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-          <IconButton color="inherit">
-            <NotificationsNoneIcon />
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <IconButton color="inherit" size="small">
+            <NotificationsNoneIcon fontSize="small" />
           </IconButton>
           <IconButton
             color="inherit"
+            size="small"
             aria-controls={anchorEl ? 'settings-menu' : undefined}
             aria-haspopup="true"
             aria-expanded={Boolean(anchorEl)}
             onClick={handleSettingsClick}
           >
-            <SettingsIcon />
+            <SettingsIcon fontSize="small" />
           </IconButton>
           <Menu
             id="settings-menu"
@@ -86,10 +86,16 @@ export default function Navbar({ setSidebarOpen, onLogout, sidebarWidth }) {
             alt="User Avatar"
             src="https://i.pravatar.cc/150?img=32"
             sx={{
-              width: 36,
-              height: 36,
+              width: 40,
+              height: 40,
               border: '2px solid',
-              borderColor: 'primary.main',
+              borderColor: 'rgba(255,255,255,0.5)',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease',
+              '&:hover': {
+                borderColor: 'white',
+                boxShadow: '0 0 10px rgba(255,255,255,0.3)',
+              }
             }}
           />
         </Box>

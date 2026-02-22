@@ -6,7 +6,9 @@ import {
   CircularProgress,
   Snackbar,
   Alert,
-  IconButton
+  IconButton,
+  Tooltip,
+  Typography,
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { Pencil, Trash2 } from "lucide-react";
@@ -32,9 +34,31 @@ const UserList = () => {
   const columns = [
     { field: "id", headerName: "ID", width: 90 },
 
-    { field: "name", headerName: "Name", flex: 1 },
+    { 
+      field: "name", 
+      headerName: "Name", 
+      flex: 1,
+      renderCell: (params) => (
+        <Tooltip title={params.value} arrow>
+          <Typography sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', width: '100%' }}>
+            {params.value}
+          </Typography>
+        </Tooltip>
+      )
+    },
 
-    { field: "email", headerName: "Email", flex: 1.2 },
+    { 
+      field: "email", 
+      headerName: "Email", 
+      flex: 1.2,
+      renderCell: (params) => (
+        <Tooltip title={params.value} arrow>
+          <Typography sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', width: '100%' }}>
+            {params.value}
+          </Typography>
+        </Tooltip>
+      )
+    },
 
     { field: "phone", headerName: "Phone", width: 150 },
 

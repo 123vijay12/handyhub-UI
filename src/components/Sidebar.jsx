@@ -1,4 +1,3 @@
-// components/Sidebar.jsx
 import React, { useEffect, useMemo, useState, useCallback } from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
@@ -29,7 +28,8 @@ const getRoles = () => {
   return (Array.isArray(stored) ? stored : []).map((r) => String(r).toUpperCase());
 };
 
-const hasAccess = (userRoles, allowed = []) => !allowed.length || userRoles.some((r) => allowed.includes(r));
+const hasAccess = (userRoles, allowed = []) => 
+  !allowed.length || userRoles.some((r) => allowed.includes(r));
 
 const navItems = [
   {
@@ -167,30 +167,32 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen, collapsed: collap
         onClick={() => setSidebarOpen(false)}
       />
 
-        <aside
-          className={cx(
-            "fixed inset-y-0 left-0 h-screen z-50 text-white shadow-xl transition-all duration-200 flex flex-col",
-            collapsed ? "w-[74px]" : "w-64",
-            sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
-          )}
-          style={{ backgroundColor: "#1f2937" }}
+      {/* Sidebar */}
+      <aside
+        className={cx(
+          "fixed inset-y-0 left-0 h-screen z-50 text-white shadow-2xl transition-all duration-200 flex flex-col",
+          collapsed ? "w-[74px]" : "w-64",
+          sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
+        )}
+                 style={{
+            backgroundImage: 'linear-gradient(135deg, #f97316 0%, #fb923c 100%)'
+          }}
           aria-label="Sidebar Navigation"
-        >
-
+      >
         {/* Header */}
-        <div className="flex items-center justify-between px-3 py-3 border-b border-white/10">
+        <div className="flex items-center justify-between px-3 py-3 border-b border-white/10 bg-gradient-to-r from-orange-600 to-orange-500">
           <div className="flex items-center gap-2">
-            <div className="flex items-center justify-center w-8 h-8 rounded-xl bg-white/10">
+            <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-white/20 backdrop-blur">
               <UserCircle className="w-5 h-5" />
             </div>
-            {!collapsed && <div className="text-lg font-semibold">HandyHub</div>}
+            {!collapsed && <div className="text-lg font-bold tracking-wide">LocalPro+</div>}
           </div>
 
           {/* Collapser */}
           <button
             onClick={toggleCollapsed}
             className={cx(
-              "hidden lg:flex items-center justify-center rounded-md border border-white/10 hover:bg-white/10 transition-colors",
+              "hidden lg:flex items-center justify-center rounded-md border border-white/20 hover:bg-white/10 transition-colors",
               collapsed ? "w-8 h-8" : "w-9 h-9"
             )}
             title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
@@ -208,8 +210,7 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen, collapsed: collap
         </div>
 
         {/* Navigation (scrolls independently) */}
-        <nav className="flex-1 overflow-y-auto py-2 min-h-0">
-          <ul className="px-2 space-y-1">
+          <nav className="flex-1 overflow-y-auto py-3 min-h-0 scrollbar-thin scrollbar-thumb-white/30 scrollbar-track-white/10">          <ul className="px-2 space-y-1">
             {visibleNav.map((item, idx) => {
               if (item.type === "link") {
                 return (
@@ -217,13 +218,15 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen, collapsed: collap
                     <Link
                       to={item.to}
                       className={cx(
-                        "group flex items-center gap-3 px-2 py-2 rounded-md",
-                        isActive(item.to) ? "bg-indigo-600/20 text-indigo-200" : "hover:bg-white/5 text-gray-300"
+                        "group flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-300 ease-in-out transform",
+                        isActive(item.to)
+  ? "bg-white/30 text-white shadow-lg scale-[1.02]"
+  : "text-white/80 hover:bg-white hover:text-orange-600 hover:scale-[1.03] hover:shadow-md"
                       )}
                       title={collapsed ? item.label : undefined}
                     >
                       {item.icon}
-                      {!collapsed && <span className="flex-1 text-sm">{item.label}</span>}
+                      {!collapsed && <span className="flex-1 text-sm font-medium">{item.label}</span>}
                     </Link>
                   </li>
                 );
@@ -237,14 +240,14 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen, collapsed: collap
                   <button
                     onClick={() => toggleGroup(groupId)}
                     className={cx(
-                      "w-full flex items-center gap-3 px-2 py-2 rounded-md text-gray-300",
-                      open ? "bg-white/5" : "hover:bg-white/5"
+                      "w-full flex items-center gap-3 px-2 py-2.5 rounded-lg transition-all duration-200",
+                      open?"bg-white/30 text-white": "text-white/80 hover:bg-white hover:text-orange-600 hover:scale-[1.02]"
                     )}
                     aria-expanded={open}
                   >
                     {item.icon}
-                    {!collapsed && <span className="flex-1 text-sm">{item.label}</span>}
-                    <ChevronDown className={cx("w-4 h-4 ml-auto transition-transform", open ? "rotate-180" : "rotate-0")} />
+                    {!collapsed && <span className="flex-1 text-sm font-medium">{item.label}</span>}
+                    <ChevronDown className={cx("w-4 h-4 ml-auto transition-transform duration-300", open ? "rotate-180" : "rotate-0")} />
                   </button>
 
                   <div
@@ -259,8 +262,10 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen, collapsed: collap
                           <Link
                             to={child.to}
                             className={cx(
-                              "flex items-center gap-2 px-2 py-2 rounded-md text-sm text-gray-300",
-                              isActive(child.to) ? "bg-indigo-600/20 text-indigo-200" : "hover:bg-white/5"
+                              "flex items-center gap-2 px-2 py-2 rounded-lg text-sm transition-all duration-200",
+                              isActive(child.to)
+                              ? "bg-white/30 text-white"
+                              : "text-white/70 hover:bg-white hover:text-orange-600 hover:scale-[1.02]"
                             )}
                           >
                             {child.icon}
@@ -277,17 +282,17 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen, collapsed: collap
         </nav>
 
         {/* Footer */}
-        <div className="border-t border-white/10 p-3">
+       <div className="border-t border-white/30 p-3 bg-white/10 backdrop-blur-sm">
           {!collapsed ? (
-            <div className="text-xs text-gray-400">
-              <div className="font-medium text-gray-300">Signed in</div>
-              <div className="mt-1">
-                Roles: <span className="text-gray-300">{getRoles().join(", ") || "GUEST"}</span>
+            <div className="text-xs text-white/90">
+              <div className="font-semibold text-white mb-1">Signed in</div>
+              <div className="text-white/80 text-xs">
+                {getRoles().join(", ") || "GUEST"}
               </div>
             </div>
           ) : (
             <div className="flex items-center justify-center">
-              <div className="text-[10px] text-gray-400">v1.0</div>
+              <div className="text-[10px] font-bold text-white">LP+</div>
             </div>
           )}
         </div>
